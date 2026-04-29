@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /includes/
+Disallow: /sql/
+Disallow: /obrigado.html
+
+Sitemap: https://abcinvest.com.br/sitemap.xml

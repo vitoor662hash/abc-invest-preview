@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Dependências
+node_modules/
+
+# Credenciais — copiar de api/config.example.php e preencher localmente
+/api/config.php
+.env
+.env.*
