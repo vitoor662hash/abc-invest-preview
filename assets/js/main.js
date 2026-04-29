@@ -453,26 +453,56 @@
 })();
 
 /**
- * Section dots — destaca seção atual via IntersectionObserver
+ * City skyline parallax + Floor indicator
+ * - Skyline: 3 SVG layers se movem em velocidades diferentes (far lento, near rápido)
+ * - Floor indicator: destaca o "andar" atual via IntersectionObserver
  */
 (function () {
-  const dots = document.querySelectorAll('.section-dot');
-  if (!dots.length) return;
-  if (!('IntersectionObserver' in window)) return;
-  const sections = Array.prototype.map.call(dots, function (d) {
-    return document.getElementById(d.dataset.section);
+  const skyline = document.querySelector('.city-skyline');
+  const floors = document.querySelectorAll('.floor-indicator__floor');
+  const sections = Array.prototype.map.call(floors, function (f) {
+    return document.getElementById(f.dataset.section);
   }).filter(Boolean);
-  if (!sections.length) return;
-  const observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        dots.forEach(function (d) { d.classList.remove('is-active'); });
-        const dot = document.querySelector('.section-dot[data-section="' + entry.target.id + '"]');
-        if (dot) dot.classList.add('is-active');
-      }
-    });
-  }, { threshold: 0.4 });
-  sections.forEach(function (s) { observer.observe(s); });
+  if (!skyline && !floors.length) return;
+
+  const layers = {
+    far:  skyline ? skyline.querySelector('.city-skyline__layer--far')  : null,
+    mid:  skyline ? skyline.querySelector('.city-skyline__layer--mid')  : null,
+    near: skyline ? skyline.querySelector('.city-skyline__layer--near') : null,
+  };
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let ticking = false;
+
+  function update() {
+    ticking = false;
+    if (prefersReducedMotion) return;
+    const y = window.scrollY;
+    if (layers.far)  layers.far.style.setProperty('--parallax-far',   (y * 0.05).toFixed(2) + 'px');
+    if (layers.mid)  layers.mid.style.setProperty('--parallax-mid',   (y * 0.12).toFixed(2) + 'px');
+    if (layers.near) layers.near.style.setProperty('--parallax-near', (y * 0.25).toFixed(2) + 'px');
+  }
+
+  window.addEventListener('scroll', function () {
+    if (!ticking) {
+      window.requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+  update();
+
+  // Floor indicator — destaca andar atual
+  if (floors.length && sections.length && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          floors.forEach(function (f) { f.classList.remove('is-active'); });
+          const active = document.querySelector('.floor-indicator__floor[data-section="' + entry.target.id + '"]');
+          if (active) active.classList.add('is-active');
+        }
+      });
+    }, { threshold: 0.4, rootMargin: '-100px 0px -200px 0px' });
+    sections.forEach(function (s) { observer.observe(s); });
+  }
 })();
 
 

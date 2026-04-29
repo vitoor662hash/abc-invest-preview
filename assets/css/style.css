@@ -2145,43 +2145,7 @@ h3 {
   font-weight: var(--font-weight-medium);
 }
 
-/* ---------- 9. Section dots laterais ---------- */
-.section-dots {
-  position: fixed;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 50;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 12px 8px;
-  background: rgba(8, 24, 40, 0.5);
-  border-radius: var(--radius-pill);
-  -webkit-backdrop-filter: blur(8px);
-          backdrop-filter: blur(8px);
-}
-.section-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  transition: background-color 240ms ease, transform 240ms ease, box-shadow 240ms ease;
-  display: block;
-  position: relative;
-}
-.section-dot:hover {
-  background: var(--color-accent);
-  transform: scale(1.4);
-}
-.section-dot.is-active {
-  background: var(--color-accent);
-  transform: scale(1.4);
-  box-shadow: 0 0 12px rgba(27, 135, 231, 0.6);
-}
-@media (max-width: 1024px) {
-  .section-dots { display: none; }
-}
+/* (.section-dots foi removido — substituído por .floor-indicator) */
 
 
 /* =========================================================
@@ -2926,4 +2890,180 @@ h3 {
 .section-light .form-select,
 .section-white .form-select {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>");
+}
+
+
+/* =========================================================
+   v3.9 — City skyline parallax + Floor indicator
+   ========================================================= */
+
+/* ---------- City skyline (background fixed) ---------- */
+.city-skyline {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.04);
+}
+
+/* Conteúdo do site fica acima do skyline (z-index > 0) */
+.site-header,
+main,
+section,
+.site-footer { position: relative; z-index: 1; }
+
+.city-skyline__layer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  will-change: transform;
+}
+.city-skyline__layer--far {
+  bottom: 0;
+  height: 200px;
+  opacity: 0.6;
+  color: rgba(255, 255, 255, 0.05);
+  transform: translateY(var(--parallax-far, 0));
+}
+.city-skyline__layer--mid {
+  bottom: -40px;
+  height: 280px;
+  opacity: 0.7;
+  color: rgba(255, 255, 255, 0.08);
+  transform: translateY(var(--parallax-mid, 0));
+}
+.city-skyline__layer--near {
+  bottom: -80px;
+  height: 360px;
+  opacity: 0.85;
+  color: rgba(255, 255, 255, 0.12);
+  transform: translateY(var(--parallax-near, 0));
+}
+
+/* Janelinhas piscando */
+.city-window {
+  opacity: 0;
+  animation: city-window-twinkle 4.5s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  transform-origin: center;
+}
+.city-window--bright {
+  filter: drop-shadow(0 0 4px currentColor);
+}
+@keyframes city-window-twinkle {
+  0%, 100% { opacity: 0; }
+  20%      { opacity: 1; }
+  40%      { opacity: 0.4; }
+  60%      { opacity: 0.9; }
+  80%      { opacity: 0.2; }
+}
+
+/* ---------- Floor indicator ---------- */
+.floor-indicator {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 50;
+  background: rgba(8, 24, 40, 0.7);
+  -webkit-backdrop-filter: blur(12px);
+          backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-pill);
+  padding: 12px 8px;
+}
+.floor-indicator__rail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+.floor-indicator__rail::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 12px;
+  bottom: 12px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(-50%);
+  z-index: 0;
+}
+.floor-indicator__floor {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  transition: background-color 280ms cubic-bezier(0.22, 1, 0.36, 1),
+              color 280ms cubic-bezier(0.22, 1, 0.36, 1),
+              transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+              width 280ms cubic-bezier(0.22, 1, 0.36, 1),
+              height 280ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: pointer;
+}
+.floor-indicator__floor:hover {
+  background: rgba(27, 135, 231, 0.2);
+  color: var(--color-text-light);
+  transform: scale(1.15);
+}
+.floor-indicator__floor.is-active {
+  background: var(--color-accent);
+  color: white;
+  box-shadow: 0 0 0 4px rgba(27, 135, 231, 0.25),
+              0 6px 16px rgba(27, 135, 231, 0.5);
+  width: 36px;
+  height: 36px;
+}
+.floor-indicator__num {
+  font-size: 11px;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+.floor-indicator__label {
+  /* Tooltip que aparece no hover */
+  position: absolute;
+  right: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(8, 24, 40, 0.95);
+  color: white;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.floor-indicator__floor:hover .floor-indicator__label {
+  opacity: 1;
+}
+
+/* Esconder em telas <= 1024px */
+@media (max-width: 1024px) {
+  .floor-indicator { display: none; }
+}
+
+/* Reduced motion: skyline estático, parallax desligado, janelas semi-transparentes */
+@media (prefers-reduced-motion: reduce) {
+  .city-skyline__layer { transform: none !important; }
+  .city-window {
+    animation: none !important;
+    opacity: 0.5 !important;
+  }
 }
