@@ -79,7 +79,7 @@
    * Reveal on scroll com stagger
    * .reveal | .reveal-up | .reveal-left | .reveal-scale
    * ------------------------------------------------------- */
-  const REVEAL_SELECTOR = '.reveal, .reveal-up, .reveal-left, .reveal-scale';
+  const REVEAL_SELECTOR = '.reveal, .reveal-up, .reveal-left, .reveal-scale, .reveal-curtain, .reveal-bounce, .reveal-blueprint, .reveal-stagger';
   const reveals = document.querySelectorAll(REVEAL_SELECTOR);
 
   // Stagger: itens irmãos no mesmo pai recebem transition-delay incremental (max 5)
@@ -490,19 +490,61 @@
   }, { passive: true });
   update();
 
-  // Floor indicator — destaca andar atual
+  // Floor indicator — destaca andar atual + dispara floor-flash
+  const flash = document.querySelector('[data-floor-flash]');
+  const flashNum = flash ? flash.querySelector('.floor-flash__num') : null;
+  const flashLabel = flash ? flash.querySelector('.floor-flash__label') : null;
+  let flashTimer = null;
+  let lastActiveSection = null;
+
   if (floors.length && sections.length && 'IntersectionObserver' in window) {
     const observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
           floors.forEach(function (f) { f.classList.remove('is-active'); });
           const active = document.querySelector('.floor-indicator__floor[data-section="' + entry.target.id + '"]');
-          if (active) active.classList.add('is-active');
+          if (active) {
+            active.classList.add('is-active');
+
+            // Dispara flash do andar quando muda de seção
+            if (flash && entry.target.id !== lastActiveSection) {
+              lastActiveSection = entry.target.id;
+              if (flashNum) flashNum.textContent = active.querySelector('.floor-indicator__num').textContent;
+              if (flashLabel) flashLabel.textContent = active.querySelector('.floor-indicator__label').textContent;
+              flash.classList.add('is-active');
+              if (flashTimer) window.clearTimeout(flashTimer);
+              flashTimer = window.setTimeout(function () {
+                flash.classList.remove('is-active');
+              }, 1200);
+            }
+          }
         }
       });
     }, { threshold: 0.4, rootMargin: '-100px 0px -200px 0px' });
     sections.forEach(function (s) { observer.observe(s); });
   }
+})();
+
+
+/**
+ * Section dividers — fade-in scale ao entrar viewport
+ */
+(function () {
+  const dividers = document.querySelectorAll('.section-divider');
+  if (!dividers.length) return;
+  if (!('IntersectionObserver' in window)) {
+    dividers.forEach(function (d) { d.classList.add('is-visible'); });
+    return;
+  }
+  const observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  dividers.forEach(function (d) { observer.observe(d); });
 })();
 
 
