@@ -2085,13 +2085,9 @@ h3 {
   width: 22px;
   height: 22px;
 }
+/* Mobile: floor-indicator compacto já cobre navegação rápida — sem back-to-top */
 @media (max-width: 767px) {
-  .back-to-top {
-    bottom: 80px;
-    left: 16px;
-    width: 44px;
-    height: 44px;
-  }
+  .back-to-top { display: none; }
 }
 
 /* ---------- 8. FAQ search ---------- */
@@ -3054,9 +3050,48 @@ section,
   opacity: 1;
 }
 
-/* Esconder em telas <= 1024px */
-@media (max-width: 1024px) {
-  .floor-indicator { display: none; }
+/* Tablet (768–1024px): mantém à direita, levemente mais perto da borda */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .floor-indicator { right: 16px; }
+}
+
+/* Mobile (<768px): versão compacta lateral ESQUERDA — evita conflito
+   com sticky WhatsApp/CTA no canto inferior direito */
+@media (max-width: 767px) {
+  .floor-indicator {
+    right: auto;
+    left: 12px;
+    padding: 8px 5px;
+    border-radius: 24px;
+    background: rgba(8, 24, 40, 0.85);
+  }
+  .floor-indicator__rail { gap: 5px; }
+  .floor-indicator__rail::before { display: none; }
+  .floor-indicator__floor {
+    width: 26px;
+    height: 26px;
+    font-size: 9px;
+  }
+  .floor-indicator__floor.is-active {
+    width: 30px;
+    height: 30px;
+    font-size: 10px;
+    box-shadow: 0 0 0 3px rgba(27, 135, 231, 0.25),
+                0 4px 12px rgba(27, 135, 231, 0.5);
+  }
+  .floor-indicator__num { font-size: 9px; }
+  /* Tooltips escondidos em touch (sem hover, ocuparia tela) */
+  .floor-indicator__label { display: none; }
+}
+
+/* Mobile estreito (<380px): ainda mais compacto */
+@media (max-width: 380px) {
+  .floor-indicator {
+    left: 8px;
+    padding: 6px 4px;
+  }
+  .floor-indicator__floor { width: 22px; height: 22px; }
+  .floor-indicator__floor.is-active { width: 26px; height: 26px; }
 }
 
 /* Reduced motion: skyline estático, parallax desligado, janelas semi-transparentes */
@@ -3107,6 +3142,11 @@ section,
 @keyframes divider-window-pulse {
   0%, 100% { opacity: 0; }
   50%      { opacity: 1; }
+}
+
+/* Mobile: dividers somem (não combinam com layout estreito) */
+@media (max-width: 767px) {
+  .section-divider { display: none; }
 }
 
 /* ---------- Reveal variants extras ---------- */
