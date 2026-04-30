@@ -499,28 +499,42 @@
 
   if (floors.length && sections.length && 'IntersectionObserver' in window) {
     const observer = new IntersectionObserver(function (entries) {
+      // Pega a entry "mais visível" entre todas que cruzam a linha central
+      // (em vez de aplicar a primeira que vier, que poderia ser uma seção fora do foco)
+      let topEntry = null;
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          floors.forEach(function (f) { f.classList.remove('is-active'); });
-          const active = document.querySelector('.floor-indicator__floor[data-section="' + entry.target.id + '"]');
-          if (active) {
-            active.classList.add('is-active');
-
-            // Dispara flash do andar quando muda de seção
-            if (flash && entry.target.id !== lastActiveSection) {
-              lastActiveSection = entry.target.id;
-              if (flashNum) flashNum.textContent = active.querySelector('.floor-indicator__num').textContent;
-              if (flashLabel) flashLabel.textContent = active.querySelector('.floor-indicator__label').textContent;
-              flash.classList.add('is-active');
-              if (flashTimer) window.clearTimeout(flashTimer);
-              flashTimer = window.setTimeout(function () {
-                flash.classList.remove('is-active');
-              }, 1200);
-            }
+          if (!topEntry || entry.intersectionRatio > topEntry.intersectionRatio) {
+            topEntry = entry;
           }
         }
       });
-    }, { threshold: 0.4, rootMargin: '-100px 0px -200px 0px' });
+      if (!topEntry) return;
+
+      floors.forEach(function (f) { f.classList.remove('is-active'); });
+      const active = document.querySelector('.floor-indicator__floor[data-section="' + topEntry.target.id + '"]');
+      if (active) {
+        active.classList.add('is-active');
+
+        // Dispara flash quando muda de seção (debounce via lastActiveSection)
+        if (flash && topEntry.target.id !== lastActiveSection) {
+          lastActiveSection = topEntry.target.id;
+          if (flashNum) flashNum.textContent = active.querySelector('.floor-indicator__num').textContent;
+          if (flashLabel) flashLabel.textContent = active.querySelector('.floor-indicator__label').textContent;
+          flash.classList.add('is-active');
+          if (flashTimer) window.clearTimeout(flashTimer);
+          flashTimer = window.setTimeout(function () {
+            flash.classList.remove('is-active');
+          }, 1200);
+        }
+      }
+    }, {
+      // Linha de detecção no centro do viewport (10% de altura).
+      // Quando o centro de uma seção cruza essa linha, ela vira ativa.
+      // Funciona em qualquer tamanho de tela (desktop, tablet, mobile).
+      rootMargin: '-45% 0px -45% 0px',
+      threshold: 0,
+    });
     sections.forEach(function (s) { observer.observe(s); });
   }
 })();
