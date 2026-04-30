@@ -453,44 +453,16 @@
 })();
 
 /**
- * City skyline parallax + Floor indicator
- * - Skyline: 3 SVG layers se movem em velocidades diferentes (far lento, near rápido)
- * - Floor indicator: destaca o "andar" atual via IntersectionObserver
+ * Floor indicator — destaca o "andar" atual via IntersectionObserver
+ * + dispara floor-flash quando muda de seção
  */
 (function () {
-  const skyline = document.querySelector('.city-skyline');
   const floors = document.querySelectorAll('.floor-indicator__floor');
   const sections = Array.prototype.map.call(floors, function (f) {
     return document.getElementById(f.dataset.section);
   }).filter(Boolean);
-  if (!skyline && !floors.length) return;
+  if (!floors.length) return;
 
-  const layers = {
-    far:  skyline ? skyline.querySelector('.city-skyline__layer--far')  : null,
-    mid:  skyline ? skyline.querySelector('.city-skyline__layer--mid')  : null,
-    near: skyline ? skyline.querySelector('.city-skyline__layer--near') : null,
-  };
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let ticking = false;
-
-  function update() {
-    ticking = false;
-    if (prefersReducedMotion) return;
-    const y = window.scrollY;
-    if (layers.far)  layers.far.style.setProperty('--parallax-far',   (y * 0.05).toFixed(2) + 'px');
-    if (layers.mid)  layers.mid.style.setProperty('--parallax-mid',   (y * 0.12).toFixed(2) + 'px');
-    if (layers.near) layers.near.style.setProperty('--parallax-near', (y * 0.25).toFixed(2) + 'px');
-  }
-
-  window.addEventListener('scroll', function () {
-    if (!ticking) {
-      window.requestAnimationFrame(update);
-      ticking = true;
-    }
-  }, { passive: true });
-  update();
-
-  // Floor indicator — destaca andar atual + dispara floor-flash
   const flash = document.querySelector('[data-floor-flash]');
   const flashNum = flash ? flash.querySelector('.floor-flash__num') : null;
   const flashLabel = flash ? flash.querySelector('.floor-flash__label') : null;
