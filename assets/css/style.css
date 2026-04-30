@@ -3211,3 +3211,64 @@ section,
     transition: none !important;
   }
 }
+
+/* =========================================================
+   v3.11 — Section overlap (camadas empilhadas no scroll)
+   ========================================================= */
+
+main > section {
+  position: relative;
+  z-index: 1;
+}
+
+main > section:not(:first-child),
+main > .stats-strip + section,
+main > section + section {
+  border-top-left-radius: 36px;
+  border-top-right-radius: 36px;
+  margin-top: -36px;
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.35);
+}
+
+main > section:nth-of-type(1)  { z-index: 1; }
+main > section:nth-of-type(2)  { z-index: 2; }
+main > section:nth-of-type(3)  { z-index: 3; }
+main > section:nth-of-type(4)  { z-index: 4; }
+main > section:nth-of-type(5)  { z-index: 5; }
+main > section:nth-of-type(6)  { z-index: 6; }
+main > section:nth-of-type(7)  { z-index: 7; }
+main > section:nth-of-type(8)  { z-index: 8; }
+main > section:nth-of-type(9)  { z-index: 9; }
+main > section:nth-of-type(10) { z-index: 10; }
+
+.site-footer {
+  position: relative;
+  z-index: 11;
+  border-top-left-radius: 36px;
+  border-top-right-radius: 36px;
+  margin-top: -36px;
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.hero {
+  border-radius: 0 !important;
+  margin-top: 0 !important;
+  box-shadow: none !important;
+}
+
+.stats-strip {
+  border-radius: 0 !important;
+  margin-top: 0 !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 767px) {
+  main > section:not(:first-child),
+  main > section + section,
+  .site-footer {
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    margin-top: -24px;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.3);
+  }
+}
