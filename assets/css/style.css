@@ -2505,11 +2505,13 @@ h3 {
   align-items: center;
   width: max-content;
   animation: parceiros-scroll 35s linear infinite;
+  will-change: transform;
 }
 .parceiros-marquee[data-marquee-reverse] .parceiros-marquee__track {
   animation-direction: reverse;
 }
-.parceiros-marquee:hover .parceiros-marquee__track {
+.parceiros-marquee:hover .parceiros-marquee__track,
+.parceiros-marquee.is-paused .parceiros-marquee__track {
   animation-play-state: paused;
 }
 @keyframes parceiros-scroll {

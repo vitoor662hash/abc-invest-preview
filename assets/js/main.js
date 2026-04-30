@@ -645,3 +645,24 @@
     }
   });
 })();
+
+/**
+ * Pause de marquees fora do viewport — economia de GPU
+ */
+(function () {
+  const marquees = document.querySelectorAll('.parceiros-marquee');
+  if (!marquees.length || !('IntersectionObserver' in window)) return;
+
+  const observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      entry.target.classList.toggle('is-paused', !entry.isIntersecting);
+    });
+  }, {
+    rootMargin: '200px 0px',
+  });
+
+  marquees.forEach(function (m) {
+    m.classList.add('is-paused');
+    observer.observe(m);
+  });
+})();
