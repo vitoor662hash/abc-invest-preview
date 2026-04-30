@@ -3104,49 +3104,8 @@ section,
 
 
 /* =========================================================
-   v3.10 — Section dividers + reveal variants + floor flash
+   v3.10 — Reveal variants + floor flash
    ========================================================= */
-
-/* ---------- Section divider (silhueta de prédio entre seções) ---------- */
-.section-divider {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: var(--space-7) 0 var(--space-5);
-  color: var(--color-accent);
-  opacity: 0;
-  transform: translateY(20px) scale(0.8);
-  transition: opacity 800ms cubic-bezier(0.22, 1, 0.36, 1),
-              transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-.section-divider.is-visible {
-  opacity: 0.5;
-  transform: translateY(0) scale(1);
-}
-.section-divider svg {
-  width: 100%;
-  max-width: 200px;
-  height: 60px;
-}
-/* Janelas piscam quando o divider aparece */
-.section-divider svg rect[width="4"] {
-  animation: divider-window-pulse 2.5s ease-in-out infinite;
-  fill: currentColor;
-  opacity: 0;
-}
-.section-divider svg rect[width="4"]:nth-of-type(1) { animation-delay: 0s; }
-.section-divider svg rect[width="4"]:nth-of-type(2) { animation-delay: 0.6s; }
-.section-divider svg rect[width="4"]:nth-of-type(3) { animation-delay: 1.2s; }
-.section-divider svg rect[width="4"]:nth-of-type(4) { animation-delay: 1.8s; }
-@keyframes divider-window-pulse {
-  0%, 100% { opacity: 0; }
-  50%      { opacity: 1; }
-}
-
-/* Mobile: dividers somem (não combinam com layout estreito) */
-@media (max-width: 767px) {
-  .section-divider { display: none; }
-}
 
 /* ---------- Reveal variants extras ---------- */
 
@@ -3240,7 +3199,6 @@ section,
 
 /* ---------- Reduced motion: desliga tudo ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .section-divider,
   .reveal-curtain,
   .reveal-bounce,
   .reveal-blueprint,
@@ -3251,9 +3209,5 @@ section,
     clip-path: none !important;
     filter: none !important;
     transition: none !important;
-  }
-  .section-divider svg rect[width="4"] {
-    animation: none !important;
-    opacity: 0.7 !important;
   }
 }

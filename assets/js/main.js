@@ -527,28 +527,6 @@
 
 
 /**
- * Section dividers — fade-in scale ao entrar viewport
- */
-(function () {
-  const dividers = document.querySelectorAll('.section-divider');
-  if (!dividers.length) return;
-  if (!('IntersectionObserver' in window)) {
-    dividers.forEach(function (d) { d.classList.add('is-visible'); });
-    return;
-  }
-  const observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-  dividers.forEach(function (d) { observer.observe(d); });
-})();
-
-
-/**
  * Decifre o ABC — hero interactive
  * Reveal manual via clique, autoplay após 8s, persistência via sessionStorage.
  */
