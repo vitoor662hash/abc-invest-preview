@@ -3177,7 +3177,8 @@ h3 {
 /* A partir da 3ª section (depois de hero + stats-strip), cada section
    sobe 36px sobre a anterior com cantos arredondados + halo sutil */
 main > section:not(.hero):not(.stats-strip) {
-  position: relative;
+  position: sticky;
+  top: 0;
   border-top-left-radius: 36px;
   border-top-right-radius: 36px;
   margin-top: -36px;
@@ -3199,7 +3200,8 @@ main > section:nth-of-type(9) { z-index: 9; }
 
 /* Footer = camada superior final */
 .site-footer {
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 10;
   border-top-left-radius: 36px;
   border-top-right-radius: 36px;
