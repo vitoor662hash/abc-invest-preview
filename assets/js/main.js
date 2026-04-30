@@ -79,7 +79,7 @@
    * Reveal on scroll com stagger
    * .reveal | .reveal-up | .reveal-left | .reveal-scale
    * ------------------------------------------------------- */
-  const REVEAL_SELECTOR = '.reveal, .reveal-up, .reveal-left, .reveal-scale, .reveal-curtain, .reveal-bounce, .reveal-blueprint, .reveal-stagger';
+  const REVEAL_SELECTOR = '.reveal, .reveal-up, .reveal-left, .reveal-scale';
   const reveals = document.querySelectorAll(REVEAL_SELECTOR);
 
   // Stagger: itens irmãos no mesmo pai recebem transition-delay incremental (max 5)
@@ -453,90 +453,26 @@
 })();
 
 /**
- * City skyline parallax + Floor indicator
- * - Skyline: 3 SVG layers se movem em velocidades diferentes (far lento, near rápido)
- * - Floor indicator: destaca o "andar" atual via IntersectionObserver
+ * Section dots — destaca seção atual via IntersectionObserver
  */
 (function () {
-  const skyline = document.querySelector('.city-skyline');
-  const floors = document.querySelectorAll('.floor-indicator__floor');
-  const sections = Array.prototype.map.call(floors, function (f) {
-    return document.getElementById(f.dataset.section);
+  const dots = document.querySelectorAll('.section-dot');
+  if (!dots.length) return;
+  if (!('IntersectionObserver' in window)) return;
+  const sections = Array.prototype.map.call(dots, function (d) {
+    return document.getElementById(d.dataset.section);
   }).filter(Boolean);
-  if (!skyline && !floors.length) return;
-
-  const layers = {
-    far:  skyline ? skyline.querySelector('.city-skyline__layer--far')  : null,
-    mid:  skyline ? skyline.querySelector('.city-skyline__layer--mid')  : null,
-    near: skyline ? skyline.querySelector('.city-skyline__layer--near') : null,
-  };
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let ticking = false;
-
-  function update() {
-    ticking = false;
-    if (prefersReducedMotion) return;
-    const y = window.scrollY;
-    if (layers.far)  layers.far.style.setProperty('--parallax-far',   (y * 0.05).toFixed(2) + 'px');
-    if (layers.mid)  layers.mid.style.setProperty('--parallax-mid',   (y * 0.12).toFixed(2) + 'px');
-    if (layers.near) layers.near.style.setProperty('--parallax-near', (y * 0.25).toFixed(2) + 'px');
-  }
-
-  window.addEventListener('scroll', function () {
-    if (!ticking) {
-      window.requestAnimationFrame(update);
-      ticking = true;
-    }
-  }, { passive: true });
-  update();
-
-  // Floor indicator — destaca andar atual + dispara floor-flash
-  const flash = document.querySelector('[data-floor-flash]');
-  const flashNum = flash ? flash.querySelector('.floor-flash__num') : null;
-  const flashLabel = flash ? flash.querySelector('.floor-flash__label') : null;
-  let flashTimer = null;
-  let lastActiveSection = null;
-
-  if (floors.length && sections.length && 'IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(function (entries) {
-      // Pega a entry "mais visível" entre todas que cruzam a linha central
-      // (em vez de aplicar a primeira que vier, que poderia ser uma seção fora do foco)
-      let topEntry = null;
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          if (!topEntry || entry.intersectionRatio > topEntry.intersectionRatio) {
-            topEntry = entry;
-          }
-        }
-      });
-      if (!topEntry) return;
-
-      floors.forEach(function (f) { f.classList.remove('is-active'); });
-      const active = document.querySelector('.floor-indicator__floor[data-section="' + topEntry.target.id + '"]');
-      if (active) {
-        active.classList.add('is-active');
-
-        // Dispara flash quando muda de seção (debounce via lastActiveSection)
-        if (flash && topEntry.target.id !== lastActiveSection) {
-          lastActiveSection = topEntry.target.id;
-          if (flashNum) flashNum.textContent = active.querySelector('.floor-indicator__num').textContent;
-          if (flashLabel) flashLabel.textContent = active.querySelector('.floor-indicator__label').textContent;
-          flash.classList.add('is-active');
-          if (flashTimer) window.clearTimeout(flashTimer);
-          flashTimer = window.setTimeout(function () {
-            flash.classList.remove('is-active');
-          }, 1200);
-        }
+  if (!sections.length) return;
+  const observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        dots.forEach(function (d) { d.classList.remove('is-active'); });
+        const dot = document.querySelector('.section-dot[data-section="' + entry.target.id + '"]');
+        if (dot) dot.classList.add('is-active');
       }
-    }, {
-      // Linha de detecção no centro do viewport (10% de altura).
-      // Quando o centro de uma seção cruza essa linha, ela vira ativa.
-      // Funciona em qualquer tamanho de tela (desktop, tablet, mobile).
-      rootMargin: '-45% 0px -45% 0px',
-      threshold: 0,
     });
-    sections.forEach(function (s) { observer.observe(s); });
-  }
+  }, { threshold: 0.4 });
+  sections.forEach(function (s) { observer.observe(s); });
 })();
 
 
