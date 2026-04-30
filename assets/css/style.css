@@ -1073,7 +1073,7 @@ h3 {
 }
 
 .thanks__card {
-  background: linear-gradient(160deg, rgba(27, 135, 231, 0.08), rgba(8, 24, 40, 0.4));
+  background: linear-gradient(160deg, #112E48, #0A1F33);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
   padding: var(--space-8) var(--space-5);
@@ -1081,8 +1081,6 @@ h3 {
   width: 100%;
   text-align: center;
   box-shadow: 0 24px 56px rgba(0, 0, 0, 0.4);
-  -webkit-backdrop-filter: blur(8px);
-          backdrop-filter: blur(8px);
 }
 
 @media (min-width: 768px) {
@@ -1583,12 +1581,10 @@ h3 {
 .quiz-wrapper { max-width: 640px; margin: 0 auto; }
 
 .quiz {
-  background: linear-gradient(160deg, rgba(27, 135, 231, 0.08), rgba(8, 24, 40, 0.4));
+  background: linear-gradient(160deg, #112E48, #0A1F33);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
   padding: clamp(24px, 4vw, 48px);
-  -webkit-backdrop-filter: blur(8px);
-          backdrop-filter: blur(8px);
 }
 
 .quiz__progress { margin-bottom: var(--space-7); }
@@ -1938,9 +1934,7 @@ h3 {
 }
 
 .site-header--scrolled {
-  background-color: rgba(8, 24, 40, 0.92);
-  -webkit-backdrop-filter: blur(12px);
-          backdrop-filter: blur(12px);
+  background-color: #081828;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
 }
 
@@ -2901,9 +2895,7 @@ h3 {
   top: 50%;
   transform: translateY(-50%);
   z-index: 50;
-  background: rgba(8, 24, 40, 0.7);
-  -webkit-backdrop-filter: blur(12px);
-          backdrop-filter: blur(12px);
+  background: #0A2138;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-pill);
   padding: 12px 8px;
@@ -3139,9 +3131,7 @@ h3 {
     align-items: center;
     gap: 8px;
     padding: 8px 16px;
-    background: rgba(8, 24, 40, 0.92);
-    -webkit-backdrop-filter: blur(12px);
-            backdrop-filter: blur(12px);
+    background: #081828;
     border: 1px solid rgba(27, 135, 231, 0.3);
     border-radius: 999px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
