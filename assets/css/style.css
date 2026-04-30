@@ -3174,9 +3174,9 @@ h3 {
    Section overlap v2 — leve (sem box-shadow, sem backdrop-filter)
    ========================================================= */
 
-/* A partir da 3ª section (depois de hero + stats-strip), cada section
-   sobe 36px sobre a anterior com cantos arredondados + halo sutil */
-main > section:not(.hero):not(.stats-strip) {
+/* A partir da 2ª section (.stats-strip), cada section sobe 36px sobre
+   a anterior com cantos arredondados + halo sutil. Hero é a base. */
+main > section:not(.hero) {
   position: sticky;
   top: 0;
   border-top-left-radius: 36px;
@@ -3190,6 +3190,7 @@ main > section:not(.hero):not(.stats-strip) {
 }
 
 /* Z-index ascendente pra empilhar corretamente */
+main > section:nth-of-type(2) { z-index: 2; }
 main > section:nth-of-type(3) { z-index: 3; }
 main > section:nth-of-type(4) { z-index: 4; }
 main > section:nth-of-type(5) { z-index: 5; }
@@ -3214,7 +3215,7 @@ main > section:nth-of-type(9) { z-index: 9; }
 }
 
 @media (max-width: 767px) {
-  main > section:not(.hero):not(.stats-strip),
+  main > section:not(.hero),
   .site-footer {
     border-top-left-radius: 24px;
     border-top-right-radius: 24px;
