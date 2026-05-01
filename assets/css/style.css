@@ -3222,3 +3222,89 @@ main > section:nth-of-type(9) { z-index: 9; }
     margin-top: -24px;
   }
 }
+
+
+/* =========================================================
+   Social links — Instagram (header + footer)
+   ========================================================= */
+
+/* ---------- Header: ícone discreto ao lado do CTA ---------- */
+.site-header__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.site-header__social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  color: var(--color-text-light-muted);
+  text-decoration: none;
+  transition: color 220ms ease, transform 220ms ease, background 220ms ease;
+}
+.site-header__social:hover {
+  color: #E1306C;
+  transform: scale(1.1);
+  background: rgba(225, 48, 108, 0.1);
+}
+.site-header__social svg {
+  width: 20px;
+  height: 20px;
+}
+@media (max-width: 640px) {
+  .site-header__social { display: none; }
+}
+
+/* ---------- Footer: bloco "Siga a gente" ---------- */
+.site-footer__social {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+.site-footer__social-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--color-text-light-muted);
+  font-weight: 600;
+}
+.site-footer__social-icons {
+  display: flex;
+  gap: var(--space-3);
+}
+.site-footer__social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text-light);
+  transition: background 220ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 220ms cubic-bezier(0.22, 1, 0.36, 1),
+              transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  text-decoration: none;
+}
+.site-footer__social-link:hover {
+  background: linear-gradient(135deg, #833AB4, #FD1D1D, #FCB045);
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(253, 29, 29, 0.3);
+}
+.site-footer__social-link svg {
+  width: 22px;
+  height: 22px;
+}
+.site-footer__social-handle {
+  font-size: 14px;
+  color: var(--color-text-light-muted);
+  margin: 0;
+}
