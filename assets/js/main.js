@@ -567,8 +567,9 @@
     });
   });
 
+  // Fallback autoplay: só roda quando prefers-reduced-motion está ativo
+  // (scroll-driven é desabilitado nesse caso, então precisa de outra forma de revelar).
   function startAutoplay() {
-    if (prefersReducedMotion) return;
     autoplayTimer = window.setTimeout(function () {
       ['A', 'B', 'C'].forEach(function (letter, idx) {
         window.setTimeout(function () { revealLetter(letter); }, idx * 1200);
@@ -580,26 +581,31 @@
   try { alreadyDecoded = sessionStorage.getItem('abc-decoded') === '1'; } catch (e) { /* */ }
   if (alreadyDecoded) {
     revealLetter('A'); revealLetter('B'); revealLetter('C');
-  } else {
+  } else if (prefersReducedMotion) {
     startAutoplay();
   }
 
-  // Scroll-driven reveal — A/B/C se revelam conforme scroll desce dentro do hero (10%, 30%, 50%)
+  // Scroll-driven reveal — uma letra por vez, conforme scroll desce no hero (5% / 30% / 55%)
   if (!prefersReducedMotion && hero) {
     const scrollLetters = ['A', 'B', 'C'];
-    const thresholds = [0.10, 0.30, 0.50];
+    const thresholds = [0.05, 0.30, 0.55];
     let ticking = false;
 
     function updateScrollReveal() {
       ticking = false;
       const rect = hero.getBoundingClientRect();
       const progress = Math.max(0, Math.min(1, -rect.top / rect.height));
-      scrollLetters.forEach(function (letter, idx) {
-        if (progress >= thresholds[idx] && !revealed.has(letter)) {
+      // Revela só a PRÓXIMA letra ainda não revelada — força sequencial mesmo se
+      // progress passar múltiplas thresholds num único frame (ex: scroll rápido).
+      for (let i = 0; i < scrollLetters.length; i++) {
+        const letter = scrollLetters[i];
+        if (revealed.has(letter)) continue;
+        if (progress >= thresholds[i]) {
           if (autoplayTimer) { window.clearTimeout(autoplayTimer); autoplayTimer = null; }
           revealLetter(letter);
         }
-      });
+        break;
+      }
     }
 
     window.addEventListener('scroll', function () {
