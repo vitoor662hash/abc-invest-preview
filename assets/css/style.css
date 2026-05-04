@@ -3231,6 +3231,20 @@ main > section:nth-of-type(9) { z-index: 9; }
   }
 }
 
+/* Mobile: desliga sticky stack — scroll natural, sem section trancando viewport.
+   Border-radius + margin negativa da regra base permanecem, então as bordas
+   arredondadas continuam marcando a transição entre sections. */
+@media (max-width: 767px) {
+  main > section:not(.hero) {
+    position: relative !important;
+    top: auto !important;
+  }
+  .site-footer {
+    position: relative !important;
+    top: auto !important;
+  }
+}
+
 
 /* =========================================================
    Social links — Instagram (header + footer)
