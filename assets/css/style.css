@@ -3329,7 +3329,7 @@ main > section:nth-of-type(9) { z-index: 9; }
   justify-content: center;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.85;
+  opacity: 0.55;
 }
 
 .hero-build-scene__svg {
