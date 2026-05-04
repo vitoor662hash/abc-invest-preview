@@ -3223,6 +3223,19 @@ main > section:nth-of-type(9) { z-index: 9; }
   }
 }
 
+/* Mobile + tablet: desliga sticky stack — scroll natural.
+   Border-radius + margin negativa do overlap continuam (efeito visual mantido). */
+@media (max-width: 1024px) {
+  main > section:not(.hero) {
+    position: relative !important;
+    top: auto !important;
+  }
+  .site-footer {
+    position: relative !important;
+    top: auto !important;
+  }
+}
+
 
 /* =========================================================
    Social links — Instagram (header + footer)
