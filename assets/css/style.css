@@ -2847,6 +2847,25 @@ h3 {
   color: var(--color-text-light);
 }
 
+/* btn-outline em sections dark / hero / footer — texto escuro padrão fica
+   invisível, então força brand azul aqui também. */
+.section-dark .btn-outline,
+.hero .btn-outline,
+.site-footer .btn-outline {
+  background-color: transparent;
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+.section-dark .btn-outline:hover,
+.section-dark .btn-outline:focus-visible,
+.hero .btn-outline:hover,
+.hero .btn-outline:focus-visible,
+.site-footer .btn-outline:hover,
+.site-footer .btn-outline:focus-visible {
+  background-color: var(--color-accent);
+  color: var(--color-text-light);
+}
+
 /* ---------- FAQ ---------- */
 .section-white .faq-item {
   background-color: rgba(255, 255, 255, 0.04);
@@ -3182,11 +3201,12 @@ h3 {
    Section overlap v2 — leve (sem box-shadow, sem backdrop-filter)
    ========================================================= */
 
-/* A partir da 2ª section (.stats-strip), cada section sobe 36px sobre
-   a anterior com cantos arredondados + halo sutil. Hero é a base. */
+/* A partir da 2ª section (.stats-strip), cada section sobe 36px sobre a
+   anterior com cantos arredondados + halo sutil. Sem sticky — scroll natural;
+   o overlap visual sai do margin negativo + border-radius + gradient.
+   Hero é a base. */
 main > section:not(.hero) {
-  position: sticky;
-  top: 0;
+  position: relative;
   border-top-left-radius: 36px;
   border-top-right-radius: 36px;
   margin-top: -36px;
@@ -3197,22 +3217,8 @@ main > section:not(.hero) {
   );
 }
 
-/* Z-index ascendente pra empilhar corretamente */
-main > section:nth-of-type(2)  { z-index: 2; }
-main > section:nth-of-type(3)  { z-index: 3; }
-main > section:nth-of-type(4)  { z-index: 4; }
-main > section:nth-of-type(5)  { z-index: 5; }
-main > section:nth-of-type(6)  { z-index: 6; }
-main > section:nth-of-type(7)  { z-index: 7; }
-main > section:nth-of-type(8)  { z-index: 8; }
-main > section:nth-of-type(9)  { z-index: 9; }
-main > section:nth-of-type(10) { z-index: 10; }
-
-/* Footer = camada superior final */
 .site-footer {
-  position: sticky;
-  top: 0;
-  z-index: 11;
+  position: relative;
   border-top-left-radius: 36px;
   border-top-right-radius: 36px;
   margin-top: -36px;
@@ -3229,20 +3235,6 @@ main > section:nth-of-type(10) { z-index: 10; }
     border-top-left-radius: 24px;
     border-top-right-radius: 24px;
     margin-top: -24px;
-  }
-}
-
-/* Mobile: desliga sticky stack — scroll natural, sem section trancando viewport.
-   Border-radius + margin negativa da regra base permanecem, então as bordas
-   arredondadas continuam marcando a transição entre sections. */
-@media (max-width: 767px) {
-  main > section:not(.hero) {
-    position: relative !important;
-    top: auto !important;
-  }
-  .site-footer {
-    position: relative !important;
-    top: auto !important;
   }
 }
 
