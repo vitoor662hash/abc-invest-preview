@@ -414,3 +414,124 @@
     }
   } catch (e) { /* sem URLSearchParams: ignora */ }
 })();
+
+
+/**
+ * Hero quick form — captura compacta com 3 campos (nome, WhatsApp, cidade).
+ * Submete pro mesmo endpoint api/enviar-lead.php (origem=hero-quick).
+ * Em sucesso, redireciona pra obrigado.html.
+ */
+(function () {
+  'use strict';
+
+  const form = document.getElementById('hero-quick-form');
+  if (!form) return;
+
+  const submitBtn = form.querySelector('#hero-quick-submit');
+  const submitLabel = submitBtn ? submitBtn.querySelector('span') : null;
+  const toast = form.querySelector('#hero-quick-toast');
+  const csrfInput = form.querySelector('#hero-csrf-token');
+  const inputs = form.querySelectorAll('.hero-quick-form__input');
+  const whatsapp = form.querySelector('#hero-whatsapp');
+
+  function showToast(msg) {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('is-visible');
+  }
+  function hideToast() {
+    if (toast) toast.classList.remove('is-visible');
+  }
+
+  function isWhatsappValid(value) {
+    const digits = (value || '').replace(/\D/g, '');
+    return digits.length === 10 || digits.length === 11;
+  }
+  function isInputValid(input) {
+    if (!input.checkValidity()) return false;
+    if (input.type === 'tel') return isWhatsappValid(input.value);
+    return true;
+  }
+
+  // Máscara WhatsApp (mesma lógica do quiz)
+  if (whatsapp) {
+    whatsapp.addEventListener('input', function (e) {
+      const d = e.target.value.replace(/\D/g, '').slice(0, 11);
+      let f = d;
+      if (d.length > 10)      f = '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7);
+      else if (d.length > 6)  f = '(' + d.slice(0, 2) + ') ' + d.slice(2, 6) + '-' + d.slice(6);
+      else if (d.length > 2)  f = '(' + d.slice(0, 2) + ') ' + d.slice(2);
+      else if (d.length > 0)  f = '(' + d;
+      e.target.value = f;
+    });
+  }
+
+  // Validação live verde/vermelho
+  inputs.forEach(function (input) {
+    input.addEventListener('input', function () {
+      const valid = isInputValid(input);
+      input.classList.toggle('is-valid',   !!input.value && valid);
+      input.classList.toggle('is-invalid', !!input.value && !valid);
+    });
+  });
+
+  // CSRF
+  fetch('api/csrf-token.php', {
+    method: 'GET',
+    credentials: 'same-origin',
+    headers: { 'Accept': 'application/json' },
+  })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) { if (d && d.token && csrfInput) csrfInput.value = d.token; })
+    .catch(function () { /* dev sem PHP: segue sem token */ });
+
+  // Submit
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    hideToast();
+
+    let allValid = true;
+    inputs.forEach(function (input) {
+      const valid = isInputValid(input);
+      input.classList.toggle('is-invalid', !valid);
+      if (!valid) allValid = false;
+    });
+    if (!allValid) {
+      showToast('Preenche os 3 campos pra continuar.');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    if (submitLabel) submitLabel.textContent = 'Enviando...';
+
+    const isLocal = ['localhost', '127.0.0.1', '0.0.0.0'].indexOf(window.location.hostname) !== -1
+                    || window.location.protocol === 'file:';
+
+    fetch('api/enviar-lead.php', {
+      method: 'POST',
+      body: new FormData(form),
+      credentials: 'same-origin',
+      headers: { 'Accept': 'application/json' },
+    })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+      .then(function (res) {
+        if (!res.ok || !res.data || !res.data.success) {
+          throw new Error((res.data && res.data.message) || 'Erro');
+        }
+        window.location.href = 'obrigado.html';
+      })
+      .catch(function () {
+        if (isLocal) {
+          // Dev local sem PHP: simula sucesso e redireciona
+          if (window.console && window.console.warn) {
+            window.console.warn('[dev] PHP backend indisponível — simulando sucesso e redirecionando.');
+          }
+          window.location.href = 'obrigado.html';
+        } else {
+          submitBtn.disabled = false;
+          if (submitLabel) submitLabel.textContent = 'Falar com Felipe';
+          showToast('Ops, deu erro. Tenta de novo ou fala direto no WhatsApp.');
+        }
+      });
+  });
+})();

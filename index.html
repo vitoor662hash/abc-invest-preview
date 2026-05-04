@@ -210,6 +210,49 @@
             Falar no WhatsApp
           </a>
         </div>
+
+        <!-- Captura rápida (3 campos) — atalho pra leads que não querem o quiz longo -->
+        <form id="hero-quick-form" class="hero-quick-form" novalidate>
+          <input type="hidden" name="csrf_token" id="hero-csrf-token" value="">
+          <input type="hidden" name="origem" value="hero-quick">
+
+          <div class="form-honeypot" aria-hidden="true">
+            <label for="hero-website">Não preencha</label>
+            <input type="text" name="website" id="hero-website" tabindex="-1" autocomplete="off">
+          </div>
+
+          <p class="hero-quick-form__label">Quer ser chamado em até 30min? Deixa só 3 dados:</p>
+
+          <div class="hero-quick-form__fields">
+            <input class="hero-quick-form__input" type="text" id="hero-nome" name="nome" required minlength="3" maxlength="120" placeholder="Seu nome" autocomplete="name">
+            <input class="hero-quick-form__input" type="tel" id="hero-whatsapp" name="whatsapp" required placeholder="(11) 98765-4321" autocomplete="tel" maxlength="16" inputmode="numeric">
+            <input class="hero-quick-form__input" type="text" id="hero-cidade" name="cidade" required minlength="2" maxlength="80" placeholder="Sua cidade" autocomplete="address-level2" list="hero-cidades-abc">
+            <datalist id="hero-cidades-abc">
+              <option value="Santo André"></option>
+              <option value="São Bernardo do Campo"></option>
+              <option value="São Caetano do Sul"></option>
+              <option value="Diadema"></option>
+              <option value="Mauá"></option>
+              <option value="Ribeirão Pires"></option>
+              <option value="Rio Grande da Serra"></option>
+              <option value="São Paulo"></option>
+            </datalist>
+          </div>
+
+          <button type="submit" class="btn btn-primary hero-quick-form__submit" id="hero-quick-submit">
+            <span>Falar com Felipe</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </button>
+
+          <div class="hero-quick-form__toast" id="hero-quick-toast" role="alert" aria-live="polite"></div>
+
+          <p class="hero-quick-form__alt">
+            Quer simular antes? <a href="#formulario">Faz o quiz completo →</a>
+          </p>
+        </form>
       </div>
 
       <!-- Decifre o ABC: 3 letras gigantes que revelam frases do manifesto + explicação da marca -->

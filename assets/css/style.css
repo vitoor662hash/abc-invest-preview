@@ -3314,3 +3314,77 @@ main > section:nth-of-type(9) { z-index: 9; }
   color: var(--color-text-light-muted);
   margin: 0;
 }
+
+/* ============== HERO QUICK FORM (3 campos inline) ============== */
+.hero-quick-form {
+  margin-top: var(--space-6);
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+.hero-quick-form__label {
+  font-size: 14px;
+  color: var(--color-text-light-muted);
+  margin: 0 0 var(--space-3) 0;
+}
+.hero-quick-form__fields {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+.hero-quick-form__input {
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-md);
+  color: var(--color-text-light);
+  font-family: inherit;
+  font-size: 15px;
+  transition: border-color 200ms ease, background 200ms ease;
+  width: 100%;
+}
+.hero-quick-form__input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+.hero-quick-form__input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  background: rgba(27, 135, 231, 0.06);
+}
+.hero-quick-form__input.is-invalid {
+  border-color: var(--color-error);
+}
+.hero-quick-form__input.is-valid {
+  border-color: var(--color-success);
+}
+.hero-quick-form__submit {
+  width: 100%;
+}
+.hero-quick-form__toast {
+  display: none;
+  margin-top: var(--space-3);
+  padding: 12px 16px;
+  background: rgba(255, 82, 82, 0.1);
+  border: 1px solid rgba(255, 82, 82, 0.4);
+  border-radius: var(--radius-md);
+  color: #FF8A8A;
+  font-size: 14px;
+}
+.hero-quick-form__toast.is-visible { display: block; }
+.hero-quick-form__alt {
+  margin-top: var(--space-3);
+  font-size: 13px;
+  color: var(--color-text-light-muted);
+}
+.hero-quick-form__alt a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+@media (max-width: 767px) {
+  .hero-quick-form__fields {
+    grid-template-columns: 1fr;
+  }
+}
