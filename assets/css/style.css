@@ -3013,6 +3013,14 @@ h3 {
   .floor-indicator__label { display: none; }
 }
 
+/* Mobile: esconder floor indicator (estava cobrindo conteúdo das sections).
+   Floor flash no topo já dá a navegação visual a cada section nova. */
+@media (max-width: 767px) {
+  .floor-indicator {
+    display: none !important;
+  }
+}
+
 /* Mobile estreito (<380px): ainda mais compacto */
 @media (max-width: 380px) {
   .floor-indicator {
