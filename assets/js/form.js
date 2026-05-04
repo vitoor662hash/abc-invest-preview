@@ -529,7 +529,7 @@
           window.location.href = 'obrigado.html';
         } else {
           submitBtn.disabled = false;
-          if (submitLabel) submitLabel.textContent = 'Falar com Felipe';
+          if (submitLabel) submitLabel.textContent = 'Falar com a equipe';
           showToast('Ops, deu erro. Tenta de novo ou fala direto no WhatsApp.');
         }
       });
