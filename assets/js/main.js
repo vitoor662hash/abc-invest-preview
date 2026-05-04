@@ -577,45 +577,49 @@
     }, 8000);
   }
 
-  let alreadyDecoded = false;
-  try { alreadyDecoded = sessionStorage.getItem('abc-decoded') === '1'; } catch (e) { /* */ }
-  if (alreadyDecoded) {
-    revealLetter('A'); revealLetter('B'); revealLetter('C');
-  } else if (prefersReducedMotion) {
-    startAutoplay();
-  }
+  if (prefersReducedMotion) {
+    // Acessibilidade: honra sessionStorage + autoplay (scroll-driven não roda aqui)
+    let alreadyDecoded = false;
+    try { alreadyDecoded = sessionStorage.getItem('abc-decoded') === '1'; } catch (e) { /* */ }
+    if (alreadyDecoded) {
+      revealLetter('A'); revealLetter('B'); revealLetter('C');
+    } else {
+      startAutoplay();
+    }
+  } else if (hero) {
+    // Reset duro: scroll-driven ignora sessionStorage stale e qualquer estado anterior.
+    // (sessionStorage estava revelando A/B/C instantaneamente em reloads — root cause.)
+    try { sessionStorage.removeItem('abc-decoded'); } catch (e) { /* */ }
+    letters.forEach(function (btn) {
+      btn.classList.remove('is-revealed');
+      btn.setAttribute('aria-expanded', 'false');
+    });
+    ['A', 'B', 'C'].forEach(function (k) { if (panels[k]) panels[k].hidden = true; });
+    if (complete) complete.hidden = true;
+    if (hint) hint.classList.remove('is-hidden');
+    if (autoplayTimer) { window.clearTimeout(autoplayTimer); autoplayTimer = null; }
 
-  // Scroll-driven reveal — uma letra por vez, conforme scroll desce no hero (5% / 30% / 55%)
-  if (!prefersReducedMotion && hero) {
-    const scrollLetters = ['A', 'B', 'C'];
-    const thresholds = [0.05, 0.30, 0.55];
-    let ticking = false;
-
-    function updateScrollReveal() {
-      ticking = false;
-      const rect = hero.getBoundingClientRect();
-      const progress = Math.max(0, Math.min(1, -rect.top / rect.height));
-      // Revela só a PRÓXIMA letra ainda não revelada — força sequencial mesmo se
-      // progress passar múltiplas thresholds num único frame (ex: scroll rápido).
-      for (let i = 0; i < scrollLetters.length; i++) {
-        const letter = scrollLetters[i];
-        if (revealed.has(letter)) continue;
-        if (progress >= thresholds[i]) {
-          if (autoplayTimer) { window.clearTimeout(autoplayTimer); autoplayTimer = null; }
-          revealLetter(letter);
-        }
-        break;
+    // Pixel-based thresholds — mais previsíveis que percentage em hero variável.
+    function checkScroll() {
+      const scrollY = window.scrollY;
+      if (scrollY > 50 && scrollY % 100 < 5) {
+        console.log('[decoder scroll]', { scrollY: scrollY, revealed: revealed.size });
+      }
+      if (scrollY > 150 && !revealed.has('A')) {
+        console.log('[decoder] revealing A at', scrollY);
+        revealLetter('A');
+      }
+      if (scrollY > 400 && !revealed.has('B')) {
+        console.log('[decoder] revealing B at', scrollY);
+        revealLetter('B');
+      }
+      if (scrollY > 700 && !revealed.has('C')) {
+        console.log('[decoder] revealing C at', scrollY);
+        revealLetter('C');
       }
     }
-
-    window.addEventListener('scroll', function () {
-      if (!ticking) {
-        window.requestAnimationFrame(updateScrollReveal);
-        ticking = true;
-      }
-    }, { passive: true });
-
-    updateScrollReveal();
+    window.addEventListener('scroll', checkScroll, { passive: true });
+    console.log('[decoder] scroll-driven init OK, listener attached');
   }
 })();
 
