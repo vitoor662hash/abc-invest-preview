@@ -3198,20 +3198,21 @@ main > section:not(.hero) {
 }
 
 /* Z-index ascendente pra empilhar corretamente */
-main > section:nth-of-type(2) { z-index: 2; }
-main > section:nth-of-type(3) { z-index: 3; }
-main > section:nth-of-type(4) { z-index: 4; }
-main > section:nth-of-type(5) { z-index: 5; }
-main > section:nth-of-type(6) { z-index: 6; }
-main > section:nth-of-type(7) { z-index: 7; }
-main > section:nth-of-type(8) { z-index: 8; }
-main > section:nth-of-type(9) { z-index: 9; }
+main > section:nth-of-type(2)  { z-index: 2; }
+main > section:nth-of-type(3)  { z-index: 3; }
+main > section:nth-of-type(4)  { z-index: 4; }
+main > section:nth-of-type(5)  { z-index: 5; }
+main > section:nth-of-type(6)  { z-index: 6; }
+main > section:nth-of-type(7)  { z-index: 7; }
+main > section:nth-of-type(8)  { z-index: 8; }
+main > section:nth-of-type(9)  { z-index: 9; }
+main > section:nth-of-type(10) { z-index: 10; }
 
 /* Footer = camada superior final */
 .site-footer {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 11;
   border-top-left-radius: 36px;
   border-top-right-radius: 36px;
   margin-top: -36px;
@@ -3336,6 +3337,83 @@ main > section:nth-of-type(9) { z-index: 9; }
   color: var(--color-text-light-muted);
   margin: 0;
 }
+
+/* ============== ONDE ESTAMOS — endereço + Google Maps embed ============== */
+.onde-estamos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: var(--space-6);
+  align-items: stretch;
+  margin-top: var(--space-6);
+}
+
+.onde-estamos__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(160deg, rgba(27, 135, 231, 0.08), rgba(8, 24, 40, 0.6));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+}
+
+.onde-estamos__icon {
+  color: var(--color-accent);
+  margin-bottom: var(--space-3);
+}
+
+.onde-estamos__title {
+  font-size: clamp(20px, 2.2vw, 24px);
+  font-weight: 700;
+  color: var(--color-text-light);
+  margin: 0 0 var(--space-3) 0;
+}
+
+.onde-estamos__lines {
+  font-style: normal;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text-light-muted);
+  margin: 0 0 var(--space-5) 0;
+}
+
+.onde-estamos__cta-group {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.onde-estamos__cta-group .btn {
+  flex: 1;
+  min-width: 160px;
+}
+
+.onde-estamos__map {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  min-height: 360px;
+  position: relative;
+  filter: brightness(0.9) contrast(1.05);
+}
+.onde-estamos__map iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+}
+
+@media (max-width: 767px) {
+  .onde-estamos-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  .onde-estamos__map { min-height: 280px; }
+  .onde-estamos__map iframe { min-height: 280px; }
+  .onde-estamos__cta-group .btn {
+    flex: 1 1 100%;
+  }
+}
+
 
 /* ============== HERO QUICK FORM (3 campos inline) ============== */
 .hero-quick-form {
