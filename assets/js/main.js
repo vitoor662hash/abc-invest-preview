@@ -583,6 +583,34 @@
   } else {
     startAutoplay();
   }
+
+  // Scroll-driven reveal — A/B/C se revelam conforme scroll desce dentro do hero (10%, 30%, 50%)
+  if (!prefersReducedMotion && hero) {
+    const scrollLetters = ['A', 'B', 'C'];
+    const thresholds = [0.10, 0.30, 0.50];
+    let ticking = false;
+
+    function updateScrollReveal() {
+      ticking = false;
+      const rect = hero.getBoundingClientRect();
+      const progress = Math.max(0, Math.min(1, -rect.top / rect.height));
+      scrollLetters.forEach(function (letter, idx) {
+        if (progress >= thresholds[idx] && !revealed.has(letter)) {
+          if (autoplayTimer) { window.clearTimeout(autoplayTimer); autoplayTimer = null; }
+          revealLetter(letter);
+        }
+      });
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(updateScrollReveal);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    updateScrollReveal();
+  }
 })();
 
 
