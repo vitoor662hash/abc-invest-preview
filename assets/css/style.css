@@ -570,102 +570,93 @@ h3 {
   color: var(--color-text-muted);
 }
 
-/* ---------- Time ---------- */
-.team {
-  display: flex;
-  justify-content: center;
-  margin-top: var(--space-7);
-}
-
-.team-card {
-  background-color: var(--color-bg-alt);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-7) var(--space-6);
-  text-align: center;
-  max-width: 480px;
-  width: 100%;
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
-}
-
-.team-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-}
-
-.team-card__photo {
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  margin: 0 auto var(--space-5);
-  background-color: #1a3553;
-  background-image: linear-gradient(135deg, #1a3553 0%, #0a2138 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255, 255, 255, 0.5);
-  font-size: var(--font-size-caption);
-  position: relative;
-  overflow: hidden;
-  border: 4px solid transparent;
-  transition: border-color var(--transition-base);
-}
-
-.team-card:hover .team-card__photo {
-  border-color: var(--color-accent);
-}
-
-.team-card__photo svg {
-  width: 64%;
-  height: 64%;
-  opacity: 0.7;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.team-card__photo-label {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 12px;
-  background: rgba(8, 24, 40, 0.7);
-  color: var(--color-text-light);
-  padding: 2px 10px;
-  border-radius: var(--radius-pill);
-}
-
-.team-card h3 {
-  margin-bottom: var(--space-1);
-}
-
-.team-card__role {
-  color: var(--color-primary);
-  font-weight: var(--font-weight-medium);
-  margin-bottom: var(--space-1);
-}
-
-.team-card__creci {
-  font-size: var(--font-size-caption);
-  color: var(--color-text-muted);
-  margin-bottom: var(--space-4);
-}
-
-.team-card__bio {
-  color: var(--color-text-muted);
-  font-style: italic;
-}
-
-.team-intro {
+/* ---------- Estrutura (escritório) ---------- */
+.estrutura-intro {
   text-align: center;
   max-width: 720px;
-  margin: 0 auto var(--space-6);
-  color: var(--color-text-muted);
+  margin: 0 auto var(--space-7);
+  color: var(--color-text-light-muted);
   font-size: var(--font-size-lead);
 }
 
-.team-footer {
+.estrutura-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+  margin-top: var(--space-6);
+}
+
+.estrutura-item {
+  position: relative;
+  margin: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.04);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+}
+
+.estrutura-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-accent);
+}
+
+.estrutura-item img {
+  display: block;
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.estrutura-item:hover img {
+  transform: scale(1.03);
+}
+
+.estrutura-credit {
   text-align: center;
   margin-top: var(--space-6);
+  font-size: var(--font-size-caption);
+  color: var(--color-text-light-muted);
+  opacity: 0.85;
+}
+
+.estrutura-credit__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: var(--space-2);
+  padding: 2px 8px;
+  background-color: rgba(46, 125, 50, 0.18);
+  color: var(--color-success);
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.05em;
+}
+
+.estrutura-credit__badge svg {
+  width: 11px;
+  height: 11px;
+}
+
+.estrutura-footer {
+  text-align: center;
+  margin-top: var(--space-6);
+}
+
+@media (max-width: 768px) {
+  .estrutura-gallery {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .estrutura-item img {
+    height: auto;
+    aspect-ratio: 4 / 5;
+  }
 }
 
 /* ---------- Imóveis ---------- */
@@ -1409,37 +1400,6 @@ h3 {
   max-width: 640px;
   margin-left: auto;
   margin-right: auto;
-}
-
-/* ---------- Team card eyebrow + selo CRECI ATIVO ---------- */
-.team-card__eyebrow {
-  display: inline-block;
-  font-size: 12px;
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--color-accent);
-  margin-bottom: var(--space-2);
-}
-
-.team-card__creci-active {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-top: var(--space-2);
-  margin-bottom: var(--space-4);
-  padding: 4px 10px;
-  background-color: rgba(46, 125, 50, 0.12);
-  color: var(--color-mcmv);
-  border-radius: var(--radius-pill);
-  font-size: 11px;
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.05em;
-}
-
-.team-card__creci-active svg {
-  width: 12px;
-  height: 12px;
 }
 
 /* ---------- Footer tagline (slogan) ---------- */
@@ -2813,19 +2773,6 @@ h3 {
 }
 .section-white .profile-card__tag-note { color: var(--color-text-light-muted); }
 .section-white .profiles-footnote      { color: var(--color-text-light-muted); }
-
-/* ---------- Time: team-card ---------- */
-.section-white .team-card {
-  background-color: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--color-text-light);
-}
-.section-white .team-card h3 { color: var(--color-text-light); }
-.section-white .team-card__role  { color: var(--color-accent); }
-.section-white .team-card__creci { color: var(--color-text-light-muted); }
-.section-white .team-card__bio   { color: var(--color-text-light-muted); }
-.section-white .team-intro       { color: var(--color-text-light-muted); }
-/* (.team-card__photo já é navy desde a regra base) */
 
 /* ---------- Imóveis (#imoveis = section-light) ---------- */
 .section-light .imoveis-disclaimer,
